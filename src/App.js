@@ -4,6 +4,7 @@ import "./App.css"
 
 function App() {
   const [workouts, setWorkouts] = useState(initialWorkouts)
+  const [showDone, setShowDone] = useState([])
 
   const addNewWorkout = () => {
     const newWorkout = generateWorkout()
@@ -25,7 +26,6 @@ function App() {
 
   const completeWorkout = (workout) => {
     console.log("completeWorkout:", workout)
-
     const completedWorkouts = workouts.map( item =>{
       if( item === workout){
         return {
@@ -36,14 +36,25 @@ function App() {
         return item
       }
     })
-
     setWorkouts(completedWorkouts)
-
   }
 
-  return (
+    const handleChange = (e) => {
+     if(e.target.checked){
+      setShowDone(workouts)
+      const newWorkouts = workouts.filter(item => item.done === true)
+      setWorkouts(newWorkouts)
+     } else {
+      setWorkouts(showDone)
+     }
+    }
+
+  
+return(
     <div className="App">
       <h1>🏋️‍♀️Workout Generator</h1>
+      <label htmlFor='toggleDone'>Show Done Only</label>
+      <input type="checkbox" id="toggleDone" onChange={handleChange}/>
       <button onClick={addNewWorkout}>Add New Workout</button>
       <ul>
         {workouts.map((workout, index) => (
